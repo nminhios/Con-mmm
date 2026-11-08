@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Hosting Panel</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#050505;
+}
+
+/* ================= START PANEL ================= */
+
+#panel{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle at 50% 20%,#18202d 0%,#07090c 45%,#020203 100%);
+}
+
+.card{
+    width:min(430px,90%);
+    padding:38px 28px;
+    text-align:center;
+    border:1px solid #252a31;
+    border-radius:24px;
+    background:rgba(15,17,21,.92);
+    box-shadow:0 30px 100px rgba(0,0,0,.8);
+}
+
+.logo{
+    width:75px;
+    height:75px;
+    margin:auto;
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:20px;
+    font-size:32px;
+    background:#191d23;
+    border:1px solid #303640;
+}
+
+h1{
+    color:white;
+    font-size:27px;
+    margin-bottom:9px;
+}
+
+.sub{
+    color:#858b94;
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:27px;
+}
+
+.enter{
+    width:100%;
+    border:0;
+    border-radius:13px;
+    padding:16px;
+    background:white;
+    color:#080808;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.enter:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 35px rgba(255,255,255,.15);
+}
+
+/* ================= CRASH SCREEN ================= */
+
+#crash{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#0756b9;
+    color:white;
+    padding:8vh 8vw;
+    z-index:5;
+}
+
+.face{
+    font-size:clamp(80px,15vw,150px);
+    font-weight:300;
+    margin-bottom:18px;
+}
+
+#crash h2{
+    font-size:clamp(24px,5vw,43px);
+    font-weight:400;
+    margin-bottom:15px;
+}
+
+.crashtext{
+    font-size:16px;
+    line-height:1.7;
+    max-width:650px;
+}
+
+.bar{
+    width:min(550px,100%);
+    height:5px;
+    margin-top:30px;
+    background:rgba(255,255,255,.25);
+}
+
+.bar span{
+    display:block;
+    width:0;
+    height:100%;
+    background:white;
+    animation:loading 6s linear forwards;
+}
+
+@keyframes loading{
+    to{width:100%}
+}
+
+/* ================= POPUP AREA ================= */
+
+#popupArea{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:50;
+    pointer-events:none;
+}
+
+/* Fake Windows-style popup */
+
+.popup{
+    position:absolute;
+    width:330px;
+    max-width:88vw;
+    background:#f4f4f4;
+    color:#111;
+    border:1px solid #777;
+    border-radius:7px;
+    box-shadow:
+        0 15px 50px rgba(0,0,0,.7),
+        0 0 0 1px rgba(255,255,255,.25);
+    overflow:hidden;
+    animation:appear .16s ease-out;
+    pointer-events:auto;
+}
+
+@keyframes appear{
+    from{
+        opacity:0;
+        transform:scale(.85);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.popupTitle{
+    height:35px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 9px 0 12px;
+    background:#e7e7e7;
+    border-bottom:1px solid #ccc;
+    font-size:13px;
+}
+
+.x{
+    font-size:19px;
+    color:#444;
+}
+
+.popupBody{
+    padding:17px;
+}
+
+.alert{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+}
+
+.icon{
+    width:32px;
+    height:32px;
+    min-width:32px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#e64646;
+    color:white;
+    font-weight:bold;
+}
+
+.popupBody strong{
+    display:block;
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.popupBody p{
+    color:#444;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.ok{
+    margin-top:15px;
+    display:flex;
+    justify-content:flex-end;
+}
+
+.ok button{
+    padding:6px 20px;
+    border:1px solid #999;
+    border-radius:4px;
+    background:#fff;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.ok button:hover{
+    background:#e8e8e8;
+}
+
+/* ================= FINAL MESSAGE ================= */
+
+#final{
+    display:none;
+    position:fixed;
+    z-index:100;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:min(390px,88%);
+    padding:28px;
+    text-align:center;
+    border-radius:20px;
+    background:#111;
+    color:white;
+    border:1px solid #333;
+    box-shadow:0 30px 100px #000;
+}
+
+#final h2{
+    margin-bottom:10px;
+}
+
+#final p{
+    color:#999;
+    font-size:13px;
+    line-height:1.5;
+}
+
+#final button{
+    margin-top:20px;
+    padding:11px 22px;
+    border:0;
+    border-radius:9px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= HOSTING PANEL ================= -->
+
+<div id="panel">
+
+    <div class="card">
+
+        <div class="logo">☁️</div>
+
+        <h1>Hosting Panel</h1>
+
+        <div class="sub">
+            Secure hosting management panel<br>
+            Click below to access your server dashboard.
+        </div>
+
+        <button class="enter" onclick="startPrank()">
+            ENTER HOSTING PANEL
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= FAKE CRASH ================= -->
+
+<div id="crash">
+
+    <div class="face">:(</div>
+
+    <h2>Your system ran into a problem</h2>
+
+    <div class="crashtext">
+        We're collecting some error information and then
+        we'll restart for you.
+        <br><br>
+        <span id="percent">0%</span> complete
+    </div>
+
+    <div class="bar">
+        <span></span>
+    </div>
+
+</div>
+
+
+<!-- ================= POPUPS ================= -->
+
+<div id="popupArea"></div>
+
+
+<!-- ================= FINAL ================= -->
+
+<div id="final">
+
+    <h2>😂 GOT PRANKED!</h2>
+
+    <p>
+        Don't worry — this was only a webpage prank.
+        Nothing on your device was changed or crashed.
+    </p>
+
+    <button onclick="location.reload()">
+        Close
+    </button>
+
+</div>
+
+
+<!-- ================= AUDIO ================= -->
+
+<audio
+    id="audio"
+    preload="auto"
+    loop
+    playsinline>
+
+    <source
+        src="https://cdn.imageurlgenerator.com/uploads/69e38e61-d994-4c42-9c6c-c55b1151594a.mp3"
+        type="audio/mpeg">
+
+</audio>
+
+
+<script>
+
+/* Start loading audio as early as possible */
+const audio = document.getElementById("audio");
+
+audio.load();
+
+
+/* ================= START ================= */
+
+function startPrank(){
+
+    /*
+     * The button click is a user gesture,
+     * so the browser allows audio playback.
+     */
+    audio.volume = 1.0;
+
+    audio.currentTime = 0;
+
+    audio.play().catch(function(err){
+        console.log("Audio could not start:",err);
+    });
+
+
+    document.getElementById("panel").style.display = "none";
+
+    document.getElementById("crash").style.display = "block";
+
+
+    let number = 0;
+
+    const progress = setInterval(function(){
+
+        number++;
+
+        document.getElementById("percent").textContent =
+            number + "%";
+
+        if(number >= 100){
+
+            clearInterval(progress);
+
+            setTimeout(showPopups,500);
+
+        }
+
+    },60);
+
+}
+
+
+/* ================= POPUP GENERATOR ================= */
+
+const messages = [
+    "System Application has stopped working",
+    "Hosting Panel is not responding",
+    "Critical system error detected",
+    "Server connection has stopped responding",
+    "Application failed to initialize",
+    "Unexpected system error occurred",
+    "Process is not responding",
+    "System diagnostic failed",
+    "Connection to host was lost",
+    "Windows encountered an unexpected problem",
+    "Memory access error detected",
+    "Background process has stopped",
+    "Server process crashed",
+    "Application requires attention"
+];
+
+
+function createPopup(){
+
+    const area = document.getElementById("popupArea");
+
+    const popup = document.createElement("div");
+
+    popup.className = "popup";
+
+    const maxX = Math.max(10,window.innerWidth - 350);
+    const maxY = Math.max(10,window.innerHeight - 220);
+
+    const x = Math.floor(Math.random()*maxX);
+    const y = Math.floor(Math.random()*maxY);
+
+    popup.style.left = x + "px";
+    popup.style.top = y + "px";
+
+    const message =
+        messages[Math.floor(Math.random()*messages.length)];
+
+    popup.innerHTML = `
+        <div class="popupTitle">
+            <span>System Alert</span>
+            <span class="x">×</span>
+        </div>
+
+        <div class="popupBody">
+
+            <div class="alert">
+
+                <div class="icon">!</div>
+
+                <div>
+                    <strong>${message}</strong>
+
+                    <p>
+                        A problem caused this process
+                        to stop working correctly.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="ok">
+                <button onclick="this.closest('.popup').remove()">
+                    OK
+                </button>
+            </div>
+
+        </div>
+    `;
+
+    area.appendChild(popup);
+
+}
+
+
+/* ================= MANY POPUPS ================= */
+
+function showPopups(){
+
+    document.getElementById("popupArea").style.display = "block";
+
+    let count = 0;
+
+    /*
+     * Creates lots of popups one after another,
+     * producing the meme-style effect.
+     */
+    const spam = setInterval(function(){
+
+        createPopup();
+
+        count++;
+
+        if(count >= 35){
+
+            clearInterval(spam);
+
+            setTimeout(function(){
+
+                document.getElementById("final").style.display =
+                    "block";
+
+            },1500);
+
+        }
+
+    },180);
+
+}
+
+
+/* ================= CLEANUP ================= */
+
+function stopAudio(){
+
+    audio.pause();
+    audio.currentTime = 0;
+
+}
+
+</script>
+
+</body>
+</html>
